@@ -1,0 +1,37 @@
+{
+  "name": "Konjenital Enfeksiyon Tanı Asistanı",
+  "short_name": "Konjenital Tanı",
+  "description": "Konjenital toksoplazma, CMV ve sifilizde bulgu tabanlı tanı sınıflaması, karar yolu ve kiloya göre doz hesabı. Hekim karar desteği ve eğitim içindir.",
+  "lang": "tr",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F6F9F9",
+  "theme_color": "#12343B",
+  "categories": [
+    "medical",
+    "education"
+  ],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

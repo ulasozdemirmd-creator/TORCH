@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Konjenital Enfeksiyon Tanı Asistanı</title>
+<meta name="theme-color" content="#12343B">
+<meta name="description" content="Konjenital ve perinatal enfeksiyonlarda bulgu tabanlı tanı sınıflaması (CMV, toksoplazma, sifiliz, rubella, HSV, HIV, HBV, HCV, varisella, Zika).">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Konjenital Tanı">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+:root{
+  --ink:#12343B; --ink-2:#3C5A60; --muted:#6B8187;
+  --paper:#F6F9F9; --card:#FFFFFF; --line:#D3E2DF; --mint:#E4F1EE;
+  --kesin:#B3261E; --kesin-bg:#FBE9E7;
+  --olasi:#B4530A; --olasi-bg:#FDEEE0;
+  --supheli:#8A6400; --supheli-bg:#FBF2DD;
+  --belirsiz:#6A4C93; --belirsiz-bg:#F1EBF8;
+  --dusuk:#1F6F78; --dusuk-bg:#E2F1F2;
+  --dis:#1E7B4F; --dis-bg:#E3F3EA;
+  --yok:#5F6B6E; --yok-bg:#EEF1F1;
+  --link:#1D4FB8;
+  --r:10px;
+  font-family:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+  color:var(--ink); background:var(--paper);
+}
+*{box-sizing:border-box}
+body{margin:0;line-height:1.5;font-size:15px;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+h1,h2,h3,h4{line-height:1.2;margin:0}
+h1{font-size:1.55rem;font-weight:700;letter-spacing:-.01em}
+h2{font-size:1.08rem;font-weight:650}
+a{color:var(--link)}
+.wrap{max-width:1400px;margin:0 auto;padding:20px 20px 60px}
+header.top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between;border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:18px}
+header.top p{margin:4px 0 0;color:var(--ink-2);max-width:72ch;font-size:.92rem}
+.disc{font-size:.8rem;color:var(--muted);max-width:52ch}
+.ver{font-size:.78rem;color:var(--muted);margin-top:6px}
+.grid{display:grid;grid-template-columns:minmax(340px,440px) 1fr;gap:22px;align-items:start}
+.grid>*{min-width:0}
+@media (max-width:1000px){.grid{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 16px 18px;margin-bottom:16px}
+.panel>h2{margin-bottom:10px}
+label{display:block;font-size:.84rem;font-weight:600;color:var(--ink-2);margin:10px 0 4px}
+input[type=date],input[type=text],input[type=number],select{width:100%;max-width:100%;min-width:0;padding:8px 10px;border:1px solid #B9CFCB;border-radius:8px;font:inherit;color:var(--ink);background:#fff}
+input:focus-visible,select:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid #7FA8F0;outline-offset:2px}
+.row{display:flex;gap:8px;align-items:flex-end}
+.row>*{flex:1;min-width:0}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--ink);background:var(--ink);color:#fff;padding:8px 12px;font-weight:600}
+button.ghost{background:#fff;color:var(--ink)}
+button.small{padding:4px 9px;font-size:.82rem}
+.hint{font-size:.8rem;color:var(--muted);margin:6px 0 0}
+.wbox{background:var(--mint);border-radius:8px;padding:2px 10px 10px;margin-top:10px}
+.check{display:flex;gap:8px;align-items:flex-start;font-weight:500;color:var(--ink);font-size:.86rem;margin:6px 0}
+.check input{margin-top:3px;width:16px;height:16px;accent-color:var(--ink);flex:0 0 auto}
+.fgroup h3{font-size:.76rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:12px 0 2px}
+.evals{display:flex;flex-wrap:wrap;gap:4px 16px;background:var(--mint);border-radius:8px;padding:8px 10px;margin-top:8px}
+.evals .check{margin:2px 0}
+details.layer{border:1px solid var(--line);border-radius:8px;padding:0 12px;margin-top:10px;background:#FBFDFC}
+details.layer[open]{border-color:var(--ink-2);background:#fff}
+details.layer summary{list-style:none;cursor:pointer;padding:10px 0;font-weight:600;display:flex;gap:8px;align-items:center}
+details.layer summary::-webkit-details-marker{display:none}
+details.layer summary input{width:18px;height:18px;accent-color:var(--ink)}
+details.layer summary .cnt{margin-left:auto;font-size:.74rem;font-weight:700;color:var(--muted)}
+details.layer .body{padding:0 0 12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}
+.sub{font-size:.8rem;font-weight:650;color:var(--ink);margin:12px 0 0;border-top:1px dashed var(--line);padding-top:8px}
+
+/* results */
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.patient{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:baseline;background:var(--ink);color:#fff;border-radius:var(--r);padding:14px 18px;margin-bottom:16px}
+.patient .age{font-size:1.45rem;font-weight:700;font-variant-numeric:tabular-nums}
+.patient .meta{font-size:.88rem;opacity:.9}
+.warn{background:var(--kesin-bg);border:1px solid #EBC1BC;color:#7A1A14;border-radius:var(--r);padding:10px 14px;margin-bottom:16px;font-size:.9rem}
+.warn ul{margin:6px 0 0;padding-left:18px}
+.summary{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.sumc{border:1px solid var(--line);border-left-width:5px;border-radius:8px;padding:9px 11px;background:#fff;text-decoration:none;color:inherit;display:block}
+.sumc .h{font-weight:650;font-size:.9rem}
+.sumc .c{font-size:.8rem;color:var(--ink-2);margin-top:3px}
+.sumc .d{font-size:.82rem;font-weight:650;margin-top:4px}
+.badge{display:inline-block;font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.cbadge{display:inline-block;font-size:.78rem;font-weight:650;padding:3px 10px;border-radius:99px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+.cbadge.c-agir{border-color:#E7B7B2;color:var(--kesin)} .cbadge.c-orta{border-color:#F0C9A6;color:var(--olasi)} .cbadge.c-hafif{border-color:#E8D29E;color:var(--supheli)} .cbadge.c-asemp{border-color:#A9D8BF;color:var(--dis)} .cbadge.c-eksik{border-style:dashed;color:var(--muted)}
+.k-kesin{background:var(--kesin-bg);color:var(--kesin)} .k-olasi{background:var(--olasi-bg);color:var(--olasi)} .k-supheli{background:var(--supheli-bg);color:var(--supheli)}
+.k-belirsiz{background:var(--belirsiz-bg);color:var(--belirsiz)} .k-dusuk{background:var(--dusuk-bg);color:var(--dusuk)} .k-dis{background:var(--dis-bg);color:var(--dis)} .k-yok{background:var(--yok-bg);color:var(--yok)}
+.sumc.k-kesin{border-left-color:var(--kesin)} .sumc.k-olasi{border-left-color:var(--olasi)} .sumc.k-supheli{border-left-color:var(--supheli)} .sumc.k-belirsiz{border-left-color:var(--belirsiz)} .sumc.k-dusuk{border-left-color:var(--dusuk)} .sumc.k-dis{border-left-color:var(--dis)} .sumc.k-yok{border-left-color:var(--yok)}
+.sumc{background:#fff!important;color:var(--ink)!important}
+.res{border:1px solid var(--line);border-radius:var(--r);background:var(--card);margin-bottom:16px;overflow:hidden}
+.res .hd{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);background:#FBFDFC}
+.res .hd h3{font-size:1.05rem;margin-right:auto}
+.res .bd{padding:12px 14px 14px;display:grid;gap:16px}
+.sec h4{margin:0 0 8px;font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.decision{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;border-radius:8px;padding:10px 12px;font-weight:650}
+.d-tx{background:#E8EDFA;color:#1F3F94} .d-case{background:var(--olasi-bg);color:var(--olasi)} .d-fu{background:var(--dis-bg);color:var(--dis)} .d-none{background:var(--yok-bg);color:var(--yok)} .d-wait{background:var(--supheli-bg);color:var(--supheli)}
+.decision .lab{font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;opacity:.8}
+/* karar yolu */
+.path{list-style:none;margin:0;padding:0;counter-reset:st}
+.path li{position:relative;padding:0 0 12px 38px;counter-increment:st}
+.path li::before{content:counter(st);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;font-weight:700;background:#fff;border:2px solid var(--line);color:var(--ink-2)}
+.path li::after{content:"";position:absolute;left:12px;top:28px;bottom:2px;width:2px;background:var(--line)}
+.path li:last-child::after{display:none}
+.path li.yes::before{border-color:var(--ink);background:var(--ink);color:#fff}
+.path li.no::before{border-color:#B9CFCB}
+.path li.warn::before{border-color:var(--supheli);background:var(--supheli-bg);color:var(--supheli)}
+.path li.stop::before{content:"✓";border-color:#1F3F94;background:#1F3F94;color:#fff}
+.path .q{font-size:.9rem;font-weight:600}
+.path .a{display:inline-block;font-size:.84rem;margin-top:3px;padding:1px 8px;border-radius:6px;background:var(--paper);border:1px solid var(--line)}
+.path li.yes .a{background:#EAF1F1;border-color:#9CC2BA}
+.path li.warn .a{background:var(--supheli-bg);border-color:#E8D29E}
+.path li.stop .a{background:#E8EDFA;border-color:#B8C7EE}
+.path .r{display:block;font-size:.84rem;color:var(--ink-2);margin-top:3px}
+.path .r::before{content:"→ ";color:var(--muted)}
+.refs{display:inline-flex;flex-wrap:wrap;gap:4px;margin-left:6px;vertical-align:middle}
+.ref{font-size:.7rem;font-weight:650;text-decoration:none;color:var(--link);border:1px solid #C9D6F2;background:#F3F6FD;border-radius:4px;padding:0 5px;white-space:nowrap}
+.ref:hover{background:#E3EAFB}
+/* doz tablosu */
+.opt{border:1px solid var(--line);border-radius:8px;margin-bottom:10px;overflow:hidden}
+.opt .ot{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:7px 10px;background:#F2F7F6;font-weight:650;font-size:.88rem;border-bottom:1px solid var(--line)}
+.tblwrap{overflow-x:auto}
+.dt{width:100%;border-collapse:collapse;font-size:.85rem}
+.dt th,.dt td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.dt th{font-size:.74rem;color:var(--ink-2);font-weight:650;background:#fff}
+.dt td.calc{font-weight:700;color:#1F3F94;white-space:nowrap}
+.dt tr:last-child td{border-bottom:none}
+.opt .on{font-size:.8rem;color:var(--ink-2);padding:6px 10px;border-top:1px solid var(--line);background:#FCFDFD}
+.wline{font-size:.82rem;color:var(--ink-2);margin:-2px 0 8px}
+.sched{list-style:none;margin:0;padding:0;font-size:.86rem}
+.sched li{display:grid;grid-template-columns:minmax(120px,max-content) 1fr;gap:4px 12px;padding:6px 0;border-bottom:1px solid var(--line)}
+.sched li:last-child{border-bottom:none}
+.sched .sd{font-weight:650;font-variant-numeric:tabular-nums}
+.blist{margin:0;padding-left:18px;font-size:.88rem}
+.blist li{margin-bottom:4px}
+.srcl{margin:0;padding-left:20px;font-size:.84rem}
+.srcl li{margin-bottom:6px}
+.srcl a{font-weight:600}
+.srcl .url{display:none}
+.empty{padding:18px;border:1px dashed #9CC2BA;border-radius:var(--r);background:#fff;color:var(--ink-2)}
+.hints{display:flex;flex-wrap:wrap;gap:8px}
+.hintc{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:#fff;font-size:.84rem;max-width:100%}
+.hintc b{display:block}
+.hintc .its{color:var(--ink-2);font-size:.78rem}
+.notes{margin:0;padding-left:18px;font-size:.88rem}
+.notes li{margin-bottom:5px}
+.updbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:50;display:none;gap:12px;align-items:center;flex-wrap:wrap;background:var(--ink);color:#fff;border-radius:12px;padding:10px 14px;box-shadow:0 6px 24px rgba(18,52,59,.35);max-width:calc(100% - 24px);font-size:.9rem}
+.updbar.show{display:flex}
+.updbar button{background:#fff;color:var(--ink);border-color:#fff}
+.install{display:none;margin-top:8px}.install.show{display:inline-block}
+.ioshint{display:none;font-size:.8rem;color:var(--ink-2);margin-top:6px;max-width:52ch}.ioshint.show{display:block}
+.offline-tag{display:none;font-size:.74rem;font-weight:700;color:var(--supheli);background:var(--supheli-bg);border-radius:99px;padding:1px 8px;margin-left:6px}.offline-tag.show{display:inline-block}
+@media (max-width:560px){.wrap{padding:14px 12px 40px}.pair{grid-template-columns:1fr}.patient .age{font-size:1.25rem}.sched li{grid-template-columns:1fr}
+  .dt thead{display:none}.dt,.dt tbody,.dt tr,.dt td{display:block;width:100%}.dt tr{border-bottom:1px solid var(--line);padding:6px 0}.dt td{border:none;padding:2px 10px}.dt td::before{content:attr(data-l)": ";font-size:.74rem;color:var(--muted);font-weight:650}.dt td.calc{white-space:normal}}
+@media print{
+  body{background:#fff;font-size:11.5px}
+  .form,.actions,.updbar,.install,.ioshint,.hintsec{display:none!important}
+  .grid{grid-template-columns:1fr}
+  .res,.opt{break-inside:avoid}
+  .patient{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+  .srcl .url{display:block;font-size:.72rem;color:var(--muted);word-break:break-all}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Konjenital Enfeksiyon Tanı Asistanı</h1>
+      <p>Toksoplazma, CMV ve sifiliz için bulgu ve testlerden tanı sınıfı, adım adım karar yolu, kiloya göre hesaplanmış tedavi seçenekleri ve izlem takvimi. Her adımın dayandığı kaynak tıklanabilir.</p>
+    </div>
+    <div>
+      <p class="disc">Eğitim ve hekim karar desteği içindir; hekim değerlendirmesinin yerini almaz. Hesaplanan dozları uygulamadan önce ürün bilgisi ve güncel rehberle doğrulayın.</p>
+      <p class="ver" id="verLine"></p>
+      <button type="button" class="ghost small install" id="installBtn">Bu cihaza yükle</button>
+      <p class="ioshint" id="iosHint">iPhone/iPad'e yüklemek için Safari'de Paylaş simgesine, ardından "Ana Ekrana Ekle"ye dokunun.</p>
+    </div>
+  </header>
+  <div class="updbar" id="updBar" role="status"><span>Yeni sürüm hazır. Yenilemek ekrandaki kaydedilmemiş bilgiyi siler.</span><button type="button" id="updBtn" class="small">Şimdi yenile</button></div>
+
+  <div class="grid">
+    <div class="form">
+      <section class="panel" aria-labelledby="h-baby">
+        <h2 id="h-baby">Bebek</h2>
+        <label for="pname">Ad veya protokol no (isteğe bağlı)</label>
+        <input id="pname" type="text" autocomplete="off">
+        <div class="row">
+          <div><label for="birth">Doğum tarihi</label><input id="birth" type="date"></div>
+          <div><label for="today">Değerlendirme tarihi</label><input id="today" type="date"></div>
+        </div>
+        <div class="row">
+          <div><label for="ga">Gestasyon haftası</label><input id="ga" type="number" min="22" max="44" step="1"></div>
+          <div><label for="bw">Doğum ağırlığı (g)</label><input id="bw" type="number" min="300" max="6000" step="10"></div>
+        </div>
+        <div class="wbox">
+          <div class="row">
+            <div><label for="weight">Güncel ağırlık (kg) – doz için</label><input id="weight" type="number" min="0.3" max="80" step="0.01" inputmode="decimal"></div>
+            <div><label for="txStart">Planlanan tedavi başlangıcı</label><input id="txStart" type="date"></div>
+          </div>
+          <p class="hint">Ağırlık girilmezse doğum ağırlığı kullanılır. Başlangıç boşsa değerlendirme tarihi alınır; takvim tarihleri buna göre hesaplanır.</p>
+        </div>
+        <label for="trans">Son kan ürünü / IVIG tarihi (varsa)</label>
+        <input id="trans" type="date">
+        <label for="sample">Örnek vaka ile dene</label>
+        <select id="sample"><option value="">Seçin…</option></select>
+      </section>
+
+      <section class="panel" aria-labelledby="h-mods">
+        <h2 id="h-mods">Enfeksiyon katmanları</h2>
+        <p class="hint">Değerlendirilecek etkenin katmanını açıp anne öyküsü ve bebek testlerini girin.</p>
+        <div id="modBox"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="h-find">
+        <h2 id="h-find">Klinik ve laboratuvar bulguları</h2>
+        <p class="hint">Var olan bulguları işaretleyin; işaretsiz bulgu "yok veya değerlendirilmedi" kabul edilir.</p>
+        <div class="evals" role="group" aria-label="Yapılan değerlendirmeler">
+          <label class="check"><input type="checkbox" id="ev-abr"> ABR yapıldı</label>
+          <label class="check"><input type="checkbox" id="ev-eye"> Göz muayenesi yapıldı</label>
+          <label class="check"><input type="checkbox" id="ev-img"> Kranial görüntüleme yapıldı</label>
+        </div>
+        <div id="findBox"></div>
+      </section>
+    </div>
+
+    <main id="out" aria-live="polite"></main>
+  </div>
+</div>
+
+<script>
+const APP_VERSION='1.1.0';
+const RULES_DATE='10.11.2026';
+// ===== ENGINE START =====
+const DAYMS=86400000;
+function pd(s){ if(!s||typeof s!=='string') return null; const p=s.split('-').map(Number); if(p.length!==3||p.some(isNaN)) return null; return new Date(p[0],p[1]-1,p[2],12); }
+function fmt(d){ return String(d.getDate()).padStart(2,'0')+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+d.getFullYear(); }
+function addDays(d,n){ const r=new Date(d.getTime()); r.setDate(r.getDate()+n); return r; }
+function addMonths(d,n){ const r=new Date(d.getFullYear(),d.getMonth()+n,1,12); const last=new Date(r.getFullYear(),r.getMonth()+1,0).getDate(); r.setDate(Math.min(d.getDate(),last)); return r; }
+function dd(a,b){ return Math.round((b.getTime()-a.getTime())/DAYMS); }
+function ageTxt(days){ if(days==null) return '?'; if(days<0) return 'doğum öncesi'; if(days<60) return days+'. gün'; const m=Math.floor(days/30.44); if(m<24) return m+' ay'; return Math.floor(m/12)+' yaş'+(m%12?' '+(m%12)+' ay':''); }
+function nf(x,d){ const p=Math.pow(10,d||0); const v=Math.round(x*p)/p; return v.toLocaleString('tr-TR',{maximumFractionDigits:d||0,minimumFractionDigits:0}); }
+
+// ---- Kaynaklar (tümü 10.11.2026'da açılarak doğrulandı)
+const SRC={
+  espid:{s:'ESPID 2017',t:'Luck SE ve ark. Congenital cytomegalovirus: a European expert consensus statement on diagnosis and management. Pediatr Infect Dis J 2017;36:1205–13.',u:'https://www.espid.org/data/files/Guideline%20Sub-Committee/OD-ESPID-18%20Congenital%20Cytomegalovirus%20-%20A%20European%20Expert%20Consensus%20Statement%20on%20Diagnosis%20and%20Management.pdf'},
+  ecci:{s:'ECCI 2024',t:'Leruez-Ville M ve ark. Consensus recommendation for prenatal, neonatal and postnatal management of congenital CMV infection (ECCI). Lancet Reg Health Eur 2024;40:100892.',u:'https://pmc.ncbi.nlm.nih.gov/articles/PMC10999471/'},
+  kimb15:{s:'NEJM 2015',t:'Kimberlin DW ve ark. Valganciclovir for symptomatic congenital cytomegalovirus disease. N Engl J Med 2015;372:933–43.',u:'https://www.nejm.org/doi/full/10.1056/NEJMoa1404599'},
+  aap26:{s:'AAP 2026',t:'American Academy of Pediatrics. Care of the Infant With Congenital Cytomegalovirus Infection (Clinical Report). Pediatrics 2026;158(4):e2026078595 – AAP basın bülteni, 21.09.2026.',u:'https://www.aap.org/en/news-room/news-releases/aap/2026/aap-seeks-to-close-knowledge-gaps-with-clinical-report-on-caring-for-infants-with-congenital-cytomegalovirus-infections/'},
+  ucsf:{s:'UCSF/Red Book',t:'UCSF Infectious Diseases Management Program. Congenital/Perinatal Infections (AAP Red Book dayanaklı).',u:'https://idmp.ucsf.edu/guidelines-empiric-therapy-categories/congenitalperinatal-infections'},
+  valcyte:{s:'FDA etiketi',t:'FDA. VALCYTE (valganciclovir) Prescribing Information, revizyon 08/2018.',u:'https://www.accessdata.fda.gov/drugsatfda_docs/label/2018/022257s009%2C021304s014lbl.pdf'},
+  aap17:{s:'AAP 2017',t:'Maldonado YA, Read JS; AAP Committee on Infectious Diseases. Diagnosis, treatment, and prevention of congenital toxoplasmosis in the United States. Pediatrics 2017;139(2):e20163860.',u:'https://pubmed.ncbi.nlm.nih.gov/28138010/'},
+  adlm:{s:'AAP 2017 özeti',t:'ADLM. Diagnosing and treating congenital toxoplasmosis (AAP 2017 raporunun özeti).',u:'https://myadlm.org/cln/cln-stat/2017/march/16/diagnosing-treating-congenital-toxoplasmosis'},
+  cdctoxo:{s:'CDC',t:'CDC. Clinical Care of Toxoplasmosis (son gözden geçirme 15.05.2026).',u:'https://www.cdc.gov/toxoplasmosis/hcp/clinical-care/index.html'},
+  hhsoi:{s:'HHS',t:'HHS. Guidelines for Prevention and Treatment of Opportunistic Infections in Children – Toxoplasmosis (29.10.2015).',u:'https://clinicalinfo.hiv.gov/sites/default/files/guidelines/documents/pediatric-oi/toxoplasmosis-pediatric-oi.pdf'},
+  msdtoxo:{s:'MSD',t:'MSD Manual Professional. Congenital Toxoplasmosis (Nisan 2026).',u:'https://www.msdmanuals.com/professional/pediatrics/infections-in-neonates/congenital-toxoplasmosis'},
+  cdcsyph:{s:'CDC 2021',t:'CDC. Sexually Transmitted Infections Treatment Guidelines, 2021 – Congenital Syphilis.',u:'https://www.cdc.gov/std/treatment-guidelines/congenital-syphilis.htm'},
+  trbild:{s:'SB',t:'T.C. Sağlık Bakanlığı KHGM. Hastanelerde bildirimi zorunlu bulaşıcı hastalıkların bildirim mekanizması.',u:'https://khgmsaglikhizmetleridb.saglik.gov.tr/Eklenti/22004/0/hastanelerde-bildirimi-zorunlu-bulasici-hastaliklarin-bildirim-mekanizmasipdf.pdf'}
+};
+
+// ---- Bulgular: anahtar → [etiket, grup, ilişkili etkenler]
+const FINDINGS={
+  mikrosefali:['Mikrosefali','Nörolojik',['cmv','toxo']],
+  kalsifikasyon_pv:['Periventriküler kalsifikasyon','Nörolojik',['cmv']],
+  kalsifikasyon_diff:['Dağınık / parankimal kalsifikasyon','Nörolojik',['toxo','cmv']],
+  ventrikulomegali:['Ventrikülomegali / hidrosefali','Nörolojik',['toxo','cmv']],
+  noro_anormal:['Anormal nörolojik muayene','Nörolojik',['cmv','toxo']],
+  nobet:['Nöbet','Nörolojik',['toxo','cmv']],
+  bos_anormal:['BOS anormal (pleositoz / protein artışı)','Nörolojik',['toxo','syph','cmv']],
+  koryoretinit:['Koryoretinit','Göz',['toxo','cmv']],
+  snhl:['Sensörinöral işitme kaybı (ABR ile doğrulanmış)','İşitme',['cmv','toxo']],
+  tarama_kaldi:['Yenidoğan işitme taramasını geçemedi','İşitme',['cmv']],
+  petesi:['Peteşi / purpura','Deri',['cmv','toxo']],
+  blueberry:['"Blueberry muffin" lezyonları','Deri',['cmv']],
+  makulo_dokuntu:['Makülopapüler döküntü (avuç içi–taban), deskuamasyon','Deri',['syph']],
+  kondiloma:['Kondiloma lata / mukoza lezyonu','Deri',['syph']],
+  rinit:['Rinit (snuffles)','Deri',['syph']],
+  hsm:['Hepatosplenomegali','Batın',['cmv','toxo','syph']],
+  hepatit:['ALT/AST artışı','Laboratuvar',['cmv','syph','toxo']],
+  direkt_bil:['Direkt hiperbilirubinemi / sarılık','Laboratuvar',['cmv','toxo','syph']],
+  trombositopeni:['Trombositopeni','Laboratuvar',['cmv','toxo','syph']],
+  anemi:['Anemi','Laboratuvar',['syph','toxo','cmv']],
+  sga:['SGA / intrauterin büyüme kısıtlılığı','Sistemik',['cmv','toxo']],
+  hidrops:['Hidrops','Sistemik',['syph','cmv','toxo']],
+  sepsis:['Yaşamı tehdit eden tablo / çoklu organ tutulumu','Sistemik',['cmv']],
+  pseudoparalizi:['Pseudoparalizi / periostit / osteokondrit','İskelet',['syph']]
+};
+const FIND_ORDER=Object.keys(FINDINGS);
+function lcF(k){ const t=FINDINGS[k][0]; return t.charAt(0).toLocaleLowerCase('tr-TR')+t.slice(1); }
+const PATH={cmv:'Konjenital CMV',toxo:'Konjenital toksoplazmoz',syph:'Konjenital sifiliz'};
+const PATH_ORDER=['cmv','toxo','syph'];
+const CLS={
+  kesin:{t:'Kesin',k:'k-kesin'}, olasi:{t:'Olası',k:'k-olasi'}, supheli:{t:'Şüpheli',k:'k-supheli'},
+  belirsiz:{t:'Belirsiz',k:'k-belirsiz'}, dusuk:{t:'Daha az olası',k:'k-dusuk'}, olasidegil:{t:'Olası değil',k:'k-dis'},
+  disland:{t:'Dışlandı',k:'k-dis'}, yok:{t:'Veri yetersiz',k:'k-yok'}
+};
+
+function computeAll(inp){
+  const out={error:null, age:null, ageDays:null, results:{}, hints:[], warn:[], W:null, Wsrc:''};
+  const b=pd(inp.birth), t=pd(inp.today);
+  if(!b||!t){ out.error='Doğum tarihi ve değerlendirme tarihi girilmelidir.'; return out; }
+  if(b>t){ out.error='Doğum tarihi değerlendirme tarihinden sonra olamaz.'; return out; }
+  const age=dd(b,t); out.ageDays=age; out.age=ageTxt(age);
+  const F=inp.findings||{}, has=k=>!!F[k], ev=inp.evals||{};
+  const evalsDone=!!(ev.abr&&ev.eye&&ev.img);
+  const missingEvals=[!ev.abr&&'işitme (ABR)',!ev.eye&&'göz muayenesi',!ev.img&&'kranial görüntüleme'].filter(Boolean);
+  const ageAt=s=>{ const d=pd(s); return d? dd(b,d):null; };
+  const trans=pd(inp.transfusion);
+  if(trans&&trans<=t) out.warn.push('Kan ürünü / IVIG verilmiş ('+fmt(trans)+'): sonrasında alınan serolojik sonuçlar pasif antikor nedeniyle yanıltıcı olabilir.');
+  const wk=parseFloat(String(inp.weight||'').replace(',','.')), bwg=parseFloat(String(inp.bw||'').replace(',','.'));
+  if(wk>0){ out.W=wk; out.Wsrc='güncel ağırlık'; }
+  else if(bwg>0){ out.W=bwg/1000; out.Wsrc='doğum ağırlığı (güncel ağırlık girilmedi)'; if(age>7) out.warn.push('Dozlar doğum ağırlığıyla hesaplandı; bebek '+ageTxt(age)+'. Güncel ağırlığı girin.'); }
+  if(out.W&&(out.W<0.3||out.W>60)) out.warn.push('Ağırlık ('+nf(out.W,2)+' kg) olağan aralık dışında; girişi kontrol edin.');
+  const W=out.W;
+  let start=pd(inp.txStart)||t;
+  if(start<b){ out.warn.push('Tedavi başlangıç tarihi doğumdan önce olamaz; değerlendirme tarihi kullanıldı.'); start=t; }
+  out.start=start;
+  if(W&&W>=40) out.warn.push('Ağırlık ≥40 kg: kg başına hesaplanan doz erişkin dozunu aşmamalıdır; bu çocukta erişkin rejimini ilgili rehberden doğrulayın.');
+  const M=inp.mods||{};
+
+  const sc0={}; FIND_ORDER.forEach(k=>{ if(has(k)) FINDINGS[k][2].forEach(p=>{ (sc0[p]=sc0[p]||[]).push(FINDINGS[k][0]); }); });
+  out.hints=PATH_ORDER.filter(p=>sc0[p]).map(p=>({p,n:sc0[p].length,items:sc0[p],on:!!(M[p]&&M[p].on)})).sort((a,c)=>c.n-a.n);
+
+  function R(p){ const r={p,cls:'yok',clin:null,clinK:null,decision:null,decK:null,path:[],options:[],schedule:[],next:[],notes:[],refs:new Set()}; out.results[p]=r; return r; }
+  function step(r,q,a,res,st,ref){ r.path.push({q,a,r:res||'',st:st||'info',ref:ref||[]}); (ref||[]).forEach(x=>r.refs.add(x)); }
+  function opt(r,title,rows,note,ref){ r.options.push({title,rows,note:note||'',ref:ref||[]}); (ref||[]).forEach(x=>r.refs.add(x)); }
+  const calc=(perKg,unit,dp,extra)=> W? nf(perKg*W,dp)+' '+unit+(extra?extra(perKg*W):'') : '— (ağırlık girin)';
+  const lbl=a=>a.map(lcF).join(', ');
+
+  // ======================= CMV =======================
+  if(M.cmv&&M.cmv.on){
+    const c=M.cmv, r=R('cmv');
+    const uA=ageAt(c.urineDate), sA=ageAt(c.salivaDate);
+    const uIn=c.urine&&uA!=null&&uA<=21, sIn=c.saliva&&sA!=null&&sA<=21;
+    const tested=[c.urine&&('idrar '+(c.urine==='pos'?'pozitif':'negatif')+(uA!=null?' – '+uA+'. gün':' – tarih yok')), c.saliva&&('tükürük '+(c.saliva==='pos'?'pozitif':'negatif')+(sA!=null?' – '+sA+'. gün':' – tarih yok')), c.dbs&&('Guthrie '+(c.dbs==='pos'?'pozitif':'negatif'))].filter(Boolean);
+    step(r,'Tanı için uygun örnek var mı? (ilk 21 günde idrar/tükürük PCR veya doğumda alınmış Guthrie kartı)', tested.length?tested.join('; '):'Test yok', tested.length?'':(age<=21?'İdrar CMV PCR için son gün '+fmt(addDays(b,21)):'21. gün geçti: tek seçenek Guthrie kartında PCR'), tested.length?'info':'warn',['espid']);
+    if((c.urine&&uA==null)||(c.saliva&&sA==null)) r.notes.push('Örnek tarihi girilmeyen PCR sonucu, 21 gün kuralı değerlendirilemediği için kullanılmadı.');
+    if(c.dbs==='pos'){ r.cls='kesin'; step(r,'Kanıt düzeyi','Guthrie PCR pozitif','Kesin konjenital enfeksiyon (örnek doğumda alınmış)','yes',['espid']); }
+    else if(uIn&&c.urine==='pos'){ r.cls='kesin'; step(r,'Kanıt düzeyi','İdrar PCR pozitif, '+uA+'. gün','Kesin: ilk 21 günde pozitif idrar PCR','yes',['espid','ecci']); }
+    else if(sIn&&c.saliva==='pos'&&uIn&&c.urine==='neg'){ r.cls='disland'; step(r,'Kanıt düzeyi','Tükürük pozitif, idrar negatif (ilk 21 gün)','Dışlandı: tükürük pozitifliği büyük olasılıkla anne sütü kontaminasyonu','no',['espid']); }
+    else if(sIn&&c.saliva==='pos'){ r.cls='olasi'; step(r,'Kanıt düzeyi','Yalnız tükürük PCR pozitif, '+sA+'. gün','Olası: idrarla doğrulanmalı','warn',['espid']); r.next.push('İdrar CMV PCR ile doğrulayın'+(age<=21?' (son gün '+fmt(addDays(b,21))+').':'; 21. gün geçtiyse Guthrie kartında PCR.')); }
+    else if(uIn&&c.urine==='neg'){ r.cls='disland'; step(r,'Kanıt düzeyi','İlk 21 günde idrar PCR negatif','Dışlandı: tek negatif idrar PCR yeterli','no',['espid']); }
+    else if(sIn&&c.saliva==='neg'){ r.cls='disland'; step(r,'Kanıt düzeyi','İlk 21 günde tükürük PCR negatif','Dışlandı (şüphe sürerse idrar PCR ile teyit)','no',['espid']); }
+    else if((c.urine==='pos'&&uA>21)||(c.saliva==='pos'&&sA>21)){
+      r.cls='belirsiz'; step(r,'Kanıt düzeyi','Pozitif örnek 21. günden sonra','Belirsiz: konjenital ve postnatal (doğum kanalı, anne sütü) enfeksiyon ayrılamaz','warn',['espid']);
+      if(c.dbs==='neg') r.notes.push('Guthrie PCR negatif; duyarlılığı yaklaşık %84 olduğundan konjenital enfeksiyonu dışlamaz.'); else r.next.push('Doğumda alınmış Guthrie kartında CMV PCR isteyin (geriye dönük tanının tek yolu).');
+    }
+    else {
+      const ind=['mikrosefali','kalsifikasyon_pv','kalsifikasyon_diff','ventrikulomegali','koryoretinit','snhl','tarama_kaldi','petesi','blueberry','hsm','hepatit','direkt_bil','trombositopeni','sga'].filter(has);
+      if(ind.length||c.prenatal){ r.cls='supheli'; step(r,'Kanıt düzeyi','Bebek testi yok','Şüpheli: '+[c.prenatal&&'prenatal tanı / annede primer enfeksiyon', ind.length&&('uyumlu bulgu – '+lbl(ind))].filter(Boolean).join('; '),'warn',['espid','aap26']); }
+      else step(r,'Kanıt düzeyi','Bebek testi ve uyumlu bulgu yok','Sınıflanamadı','info');
+      r.next.push(age<=21?'İdrar CMV PCR gönderin; son gün '+fmt(addDays(b,21))+' (ideal '+fmt(addDays(b,14))+'). Tükürük alınacaksa emzirmeden önce; pozitifse idrarla doğrulayın.':'21. gün geçti: Guthrie kartında CMV PCR isteyin; negatifliği dışlamaz (duyarlılık ~%84).');
+    }
+    if(['kesin','olasi','belirsiz'].includes(r.cls)){
+      const cns=['mikrosefali','kalsifikasyon_pv','kalsifikasyon_diff','ventrikulomegali','koryoretinit','noro_anormal','nobet'].filter(has);
+      const mild=['petesi','blueberry','hsm','hepatit','direkt_bil','trombositopeni','anemi','sga'].filter(has);
+      const severe=has('sepsis')||c.severeOrgan;
+      step(r,'Klinik değerlendirme tam mı? (ABR, göz muayenesi, kranial görüntüleme)', evalsDone?'Evet':'Eksik: '+missingEvals.join(', '), evalsDone?'':'"Asemptomatik" demek için üçü de gerekir', evalsDone?'yes':'warn',['espid']);
+      const cnsTxt=cns.map(lcF).concat(c.csf==='pos'?['BOS CMV PCR pozitif']:[]);
+      step(r,'SSS tutulumu var mı? (mikrosefali, kalsifikasyon, ventrikülomegali, koryoretinit, anormal nörolojik muayene)', cnsTxt.length?'Evet – '+cnsTxt.join(', '):'Hayır', cnsTxt.length?'Semptomatik – SSS tutulumu':'', cnsTxt.length?'yes':'no',['espid']);
+      let k;
+      if(cnsTxt.length){ k='cns'; r.clin='Semptomatik – SSS tutulumu'; r.clinK='c-agir'; }
+      else {
+        step(r,'Yaşamı tehdit eden tablo veya ağır tek organ / çoklu organ tutulumu var mı?', severe?'Evet':'Hayır', severe?'Semptomatik – ağır (SSS dışı)':'', severe?'yes':'no',['espid']);
+        if(severe){ k='severe'; r.clin='Semptomatik – ağır (SSS dışı)'; r.clinK='c-agir'; }
+        else {
+          const mod=mild.length>2||(mild.length>0&&c.persist2w);
+          step(r,'Hafif bulgu sayısı ve süresi (peteşi, hafif HSM, geçici sitopeni/transaminaz artışı, SGA…)', mild.length? mild.length+' bulgu – '+lbl(mild)+(c.persist2w?'; 2 haftadan uzun sürüyor':''):'Yok', mild.length?(mod?'Orta (>2 bulgu veya >2 hafta)':'Hafif (1–2 izole, geçici bulgu)'):'', mild.length?'yes':'no',['espid']);
+          if(has('snhl')&&mild.length){ k='severe'; r.clin='Semptomatik – işitme kaybı + sistemik bulgu'; r.clinK='c-agir'; step(r,'İşitme kaybı eşlik ediyor mu?','Evet','İşitme kaybı + sistemik bulgu: tedavi grubu','yes',['espid']); }
+          else if(mod){ k='mod'; r.clin='Semptomatik – orta'; r.clinK='c-orta'; }
+          else if(mild.length){ k='mild'; r.clin='Hafif semptomatik'; r.clinK='c-hafif'; }
+          else {
+            step(r,'İzole sensörinöral işitme kaybı var mı?', has('snhl')?'Evet':'Hayır', has('snhl')?'İzole SNHL':'', has('snhl')?'yes':'no',['espid','ecci']);
+            if(has('snhl')){ k='snhl'; r.clin='İzole sensörinöral işitme kaybı'; r.clinK='c-orta'; }
+            else if(evalsDone){ k='asx'; r.clin='Asemptomatik'; r.clinK='c-asemp'; }
+            else { k='incomplete'; r.clin='Bulgu saptanmadı – değerlendirme eksik'; r.clinK='c-eksik'; r.next.push('"Asemptomatik" sınıfı için eksik: '+missingEvals.join(', ')+'.'); }
+          }
+        }
+      }
+      if(!evalsDone&&k!=='cns') r.notes.push('Değerlendirme tamamlanmadan SSS tutulumu veya işitme kaybı dışlanamaz; klinik sınıf ve karar değişebilir.');
+      if(r.cls==='belirsiz') r.notes.push('Klinik sınıf, enfeksiyonun konjenital olduğu doğrulanırsa geçerlidir.');
+      if(r.cls==='olasi') r.notes.push('Tedavi kararı idrar PCR ile doğrulamadan sonra kesinleştirilmelidir.');
+      const aStart=dd(b,start);
+      const winTxt= aStart<=30?'≤1 ay ('+aStart+'. gün): en güçlü kanıt bu dönem için':aStart<=90?'1–3 ay ('+ageTxt(aStart)+'): ECCI 2024\'e göre yarar sağlayabilir':'>3 ay ('+ageTxt(aStart)+'): bu yaşta başlanan tedaviye ilişkin kanıt yok';
+      if(['cns','severe','mod','snhl'].includes(k)) step(r,'Tedavi başlangıç yaşı (planlanan başlangıç '+fmt(start)+')', winTxt, aStart<=30?'':'Uzmanla değerlendirin', aStart<=30?'yes':(aStart<=90?'warn':'stop'),['espid','ecci']);
+      const vgcRows=dur=>[{drug:'Valgansiklovir (oral)',perKg:'16 mg/kg/doz',calc:calc(16,'mg/doz',1,v=>' = '+nf(v/50,2)+' mL (50 mg/mL çözelti)'),freq:'Günde 2 kez (12 saatte bir)',dur:dur}];
+      const gcvRow={drug:'Gansiklovir (IV)',perKg:'6 mg/kg/doz',calc:calc(6,'mg/doz',1),freq:'12 saatte bir IV',dur:'Oral tedavi mümkün olana kadar'};
+      const endDate=addMonths(start,6);
+      const monitor=()=>{
+        r.schedule.push({d:fmt(start),t:'Başlangıç: tam kan sayımı, KCFT, böbrek fonksiyonu; doz güncel ağırlıkla.'});
+        r.schedule.push({d:[1,2,3,4].map(i=>fmt(addDays(start,7*i))).join(', '),t:'İlk 4 hafta haftalık: tam kan sayımı (nötrofil), KCFT, böbrek fonksiyonu (ESPID).'});
+        r.schedule.push({d:[2,3,4,5,6].map(i=>fmt(addMonths(start,i))).join(', '),t:'Sonra aylık aynı tetkikler; her kontrolde doz yeni ağırlıkla yeniden hesaplanır.'});
+        r.refs.add('espid'); r.refs.add('ucsf');
+      };
+      if(k==='cns'||k==='severe'){
+        r.decision='Tedavi önerilir'; r.decK='d-tx';
+        step(r,'Karar','Tedavi',k==='cns'?'Valgansiklovir 6 ay (SSS tutulumunda uzlaşı)':'Valgansiklovir: en az 6 hafta, en çok 6 ay; 6 aylık kürün işitme ve nörogelişim üstünlüğü gösterilmiştir','stop',['espid','kimb15','ecci']);
+        opt(r,'Seçenek 1 – tercih edilen',vgcRows(k==='cns'?'6 ay ('+fmt(start)+' – '+fmt(endDate)+')':'6 hafta – 6 ay; çoğu merkez 6 ay ('+fmt(endDate)+')'),'6 aylık kür, 6 haftaya göre işitme ve nörogelişimde üstün bulunmuştur (NEJM 2015).',['kimb15','espid']);
+        opt(r,'Seçenek 2 – oral alınamıyorsa',[gcvRow],'Oral alabilir hale gelince valgansiklovire geçilir; toplam süre değişmez.',['ucsf','espid']);
+        monitor();
+      } else if(k==='mod'||k==='snhl'){
+        r.decision=k==='snhl'?'Tedavi tartışmalı – ortak karar':'Vaka bazında karar'; r.decK='d-case';
+        step(r,'Karar', k==='snhl'?'Tartışmalı':'Vaka bazında', k==='snhl'?'ECCI 2024 tedavi önerir; ESPID 2017\'de çoğunluk 6 ay tedavi eder; ABD (Red Book) rutin tedavi önermez':'ESPID 2017: bulguların ağırlığı ve sürekliliğine göre 6 hafta – 6 ay','warn',k==='snhl'?['ecci','espid','ucsf']:['espid']);
+        opt(r,'Tedavi verilmesine karar verilirse',vgcRows(k==='snhl'?'6 ay ('+fmt(start)+' – '+fmt(endDate)+')':'6 hafta ('+fmt(addDays(start,42))+') – 6 ay ('+fmt(endDate)+')'),'Karar aileyle birlikte, uzman görüşüyle verilir.',['espid','ecci']);
+        monitor();
+      } else if(k==='mild'){
+        r.decision='İzlem (tedavi önerilmez)'; r.decK='d-fu';
+        step(r,'Karar','İzlem','Hafif semptomatikte çoğunluk görüşü tedavi vermemektir','stop',['espid','ucsf']);
+      } else if(k==='asx'){
+        r.decision='İzlem (tedavi önerilmez)'; r.decK='d-fu';
+        step(r,'Karar','İzlem','Asemptomatik bebekte antiviral tedavi önerilmez (uzlaşı)','stop',['espid']);
+      } else { r.decision='Değerlendirmeyi tamamlayın'; r.decK='d-wait'; step(r,'Karar','Bekle','Klinik sınıf belirlenince karar verilir','warn'); }
+      r.next.push('Başlangıç: tam kan sayımı, KCFT, direkt bilirubin, böbrek fonksiyonu, kranial USG, ABR, göz muayenesi; nörolojik bulgu veya USG anormalse MRI. Rutin LP önerilmez.');
+      r.next.push('İşitme izlemi (tedavi edilsin edilmesin): 1. yılda 3–6 ayda bir, 3 yaşa kadar 6 ayda bir, 6 yaşa kadar yılda bir. Göz: 5 yaşa kadar yıllık (bulgulu doğanlarda).');
+      if(r.options.length){
+        r.notes.push('Ara verme ölçütü: mutlak nötrofil <500/mm³ ise ara verin veya G-CSF düşünün (ESPID). FDA etiketi trombosit <25.000/mm³ ve Hb <8 g/dL\'de de kullanılmamasını belirtir.');
+        r.notes.push('Valgansiklovirin konjenital CMV\'de kullanımı etiket dışıdır (FDA etiketinde bu endikasyon için güvenlilik/etkinlik kurulmamış). Böbrek fonksiyonu bozuksa doz uzmanla ayarlanır.');
+        r.refs.add('valcyte');
+      }
+    } else {
+      r.decision= r.cls==='disland'?'CMV açısından izlem gerekmez':'Önce tanıyı netleştirin'; r.decK= r.cls==='disland'?'d-none':'d-wait';
+    }
+    r.notes.push('CMV IgM/IgG yenidoğan tanısında kullanılmaz.');
+    r.refs.add('espid');
+  }
+
+  // ======================= TOKSOPLAZMA =======================
+  if(M.toxo&&M.toxo.on){
+    const x=M.toxo, r=R('toxo');
+    const gA=ageAt(x.iggDate);
+    const afterTrans=d=>{ const dt=pd(d); return trans&&dt&&dt>=trans&&dd(trans,dt)<7; };
+    let igmOk=x.igm==='pos', igaOk=x.iga==='pos';
+    const symp=['koryoretinit','ventrikulomegali','kalsifikasyon_diff','kalsifikasyon_pv','mikrosefali','nobet','bos_anormal','hsm','hepatit','direkt_bil','trombositopeni','anemi','petesi','snhl'].filter(has);
+    step(r,'Annede gebelikte akut enfeksiyon / serokonversiyon var mı?', x.matAcute?'Evet'+(x.matWeek?' ('+x.matWeek+'. hafta)':''):'Hayır / bilinmiyor', x.amnio==='pos'?'Amniyotik sıvı PCR pozitif: fetal enfeksiyon kanıtı':'', x.matAcute?'yes':'no',['adlm']);
+    if(x.prenatalTx) r.notes.push('Prenatal tedavi kaydı var: bebeğin seroloji ve PCR duyarlılığı azalmış olabilir.');
+    if((igmOk&&afterTrans(x.igmDate))||(igaOk&&afterTrans(x.igaDate))){
+      step(r,'Örnek transfüzyon/IVIG\'den sonraki 1 hafta içinde mi alındı?','Evet','IgM/IgA sonucu değerlendirmeye alınmadı; son üründen ~1 hafta sonra tekrar','warn',['adlm']);
+      if(igmOk&&afterTrans(x.igmDate)) igmOk=false;
+      if(igaOk&&afterTrans(x.igaDate)) igaOk=false;
+    }
+    let evd='';
+    if(x.igg==='pos'&&gA!=null&&gA>=365){ r.cls='kesin'; evd='IgG 12 ayın üzerinde pozitif ('+ageTxt(gA)+')'; }
+    else if(x.pcr==='pos'){ r.cls='kesin'; evd='Kan/BOS/idrar PCR pozitif'; }
+    else if((igmOk||igaOk)&&x.refLab){ r.cls='kesin'; evd=[igmOk&&'IgM',igaOk&&'IgA'].filter(Boolean).join(' ve ')+' pozitif, referans laboratuvarda'; r.notes.push('Doğumdan hemen sonraki pozitif IgM/IgA maternal kan karışmasından olabilir; ilk günlerdeki pozitif sonuç tekrarla doğrulanmalıdır.'); }
+    else if(igmOk||igaOk){ r.cls='olasi'; evd='IgM/IgA pozitif, referans laboratuvarda doğrulanmamış'; r.next.push('Serumu referans laboratuvara gönderin (IgG, IgM, IgA).'); }
+    else if(x.igg==='neg'&&gA!=null&&gA<365&&!x.treated&&x.iggPrevPos){ r.cls='disland'; evd='Tedavisiz bebekte IgG 12 aydan önce negatifleşti ('+ageTxt(gA)+')'; }
+    else if(x.igg==='pos'&&x.matAcute&&symp.length){ r.cls='olasi'; evd='Yalnız IgG pozitif + annede akut enfeksiyon + uyumlu bulgu'; }
+    else if(x.matAcute||x.amnio==='pos'||symp.some(k=>['koryoretinit','ventrikulomegali','kalsifikasyon_diff'].includes(k))){ r.cls='supheli'; evd='Bebekte doğrulayıcı test yok; anne öyküsü veya uyumlu bulgu var'; }
+    else evd='Kanıt yok';
+    step(r,'Bebekte kanıt düzeyi (IgG >12 ay, PCR, referans laboratuvar IgM/IgA)', evd, CLS[r.cls].t, r.cls==='kesin'?'yes':(r.cls==='disland'?'no':'warn'),['adlm','aap17']);
+    if(x.igg==='neg'&&x.treated&&gA!=null&&gA<365) r.notes.push('Tedavi alan bebekte IgG baskılanabilir; negatiflik dışlama sayılmaz. Tedavi bitiminde "rebound" izlenir.');
+    if(['supheli','olasi','yok'].includes(r.cls)){
+      r.next.push('Bebekte IgG, IgM, IgA (referans laboratuvar) ve kan, idrar, BOS PCR.');
+      if(x.matAcute&&x.matWeek&&Number(x.matWeek)>=28) r.next.push('Gebelik sonu enfeksiyonu: IgM/IgA 2–4. haftada ve 3. aya kadar 4 haftada bir tekrarlanabilir.');
+      r.next.push('IgG\'yi 12. aya kadar izleyin: tedavisiz bebekte 12 aydan önce kaybolursa dışlanır, 12 ayı aşarsa kesinleşir.');
+    }
+    if(r.cls==='kesin'||r.cls==='olasi'){
+      step(r,'Klinik değerlendirme (göz, beyin görüntüleme, BOS, işitme)', symp.length?'Bulgu var – '+lbl(symp):(evalsDone?'Bulgu yok, değerlendirme tam':'Bulgu yok, değerlendirme eksik: '+missingEvals.join(', ')), symp.length?'Semptomatik':(evalsDone?'Asemptomatik':'Klinik sınıf belirlenmedi'), symp.length?'yes':(evalsDone?'no':'warn'),['msdtoxo']);
+      r.clin=symp.length?'Semptomatik':(evalsDone?'Asemptomatik':'Bulgu saptanmadı – değerlendirme eksik'); r.clinK=symp.length?'c-agir':(evalsDone?'c-asemp':'c-eksik');
+      const aStart=dd(b,start);
+      if(aStart>=365){ r.decision='Uzman değerlendirmesi'; r.decK='d-case'; step(r,'Tedavi başlangıç yaşı','≥12 ay ('+ageTxt(aStart)+')','Yenidoğan 12 aylık rejimi bu yaşta doğrudan uygulanmaz; aktif koryoretinit veya başka aktif tutulum varsa uzmanla planlanır','stop',['cdctoxo']); r.next.push('Düzenli göz muayenesi (koryoretinit yıllar sonra çıkabilir); nörolojik ve gelişimsel izlem.'); }
+      else {
+        const sympt=symp.length>0, prob=r.cls==='olasi';
+        if(prob){ r.decision='Doğrulama sonrası tedavi'; r.decK='d-case'; step(r,'Karar','Doğrula, sonra tedavi','Tanı referans laboratuvarda doğrulanınca 12 aylık tedavi başlanır; doğrulama gecikecekse ampirik başlama uzmanla tartışılır','warn',['adlm','cdctoxo']); }
+        else { r.decision='Tedavi önerilir (12 ay)'; r.decK='d-tx'; step(r,'Karar','Tedavi','Konjenital enfekte yenidoğan (semptomatik ve asemptomatik): 12 ay pirimetamin + sulfadiazin + folinik asit; günlük pirimetamin '+(sympt?'6 ay (semptomatik)':'2 ay (asemptomatik)'),'stop',['cdctoxo','hhsoi','aap17']); }
+        const dailyEnd=addMonths(start,sympt?6:2), end=addMonths(start,12);
+        opt(r,prob?'Tanı doğrulanırsa – standart rejim (12 ay)':'Standart rejim (12 ay)',[
+          {drug:'Pirimetamin – yükleme',perKg:'2 mg/kg/gün',calc:calc(2,'mg/gün',2,v=>' (tek doz ya da 2 × '+nf(v/2,2)+' mg)'),freq:'Günde 1 (veya 2\'ye bölünmüş)',dur:'İlk 2 gün ('+fmt(start)+' – '+fmt(addDays(start,1))+')'},
+          {drug:'Pirimetamin – idame',perKg:'1 mg/kg/gün',calc:calc(1,'mg/gün',2),freq:'Her gün',dur:'3. gün – '+fmt(dailyEnd)+' ('+(sympt?'6':'2')+' ay)'},
+          {drug:'Pirimetamin – sonra',perKg:'1 mg/kg/doz',calc:calc(1,'mg/doz',2),freq:'Haftada 3 gün (ör. Pzt–Çar–Cum)',dur:fmt(dailyEnd)+' – '+fmt(end)},
+          {drug:'Sulfadiazin',perKg:'50 mg/kg/doz (100 mg/kg/gün)',calc:calc(50,'mg/doz',0,v=>' (günlük '+nf(v*2,0)+' mg)'),freq:'Günde 2 kez',dur:'12 ay ('+fmt(start)+' – '+fmt(end)+')'},
+          {drug:'Folinik asit (lökovorin)',perKg:'Sabit doz',calc:'10 mg/doz',freq:'Haftada 3 kez (CDC); HHS: her pirimetamin dozuyla',dur:'Pirimetamin süresince'}
+        ],'Pirimetamin ve sulfadiazin bebeklere genellikle eczanede hazırlanan süspansiyon olarak verilir; hacim hazırlanan konsantrasyona göre hesaplanır.',['cdctoxo','hhsoi']);
+        r.notes.push('Folinik asit sıklığında kaynaklar farklıdır: CDC haftada 3 kez 10 mg, HHS her pirimetamin dozuyla 10 mg önerir.');
+        const steroid=has('koryoretinit')||x.csfProtein1g;
+        step(r,'Kortikosteroid ölçütü var mı? (aktif, görmeyi tehdit eden koryoretinit veya BOS proteini ≥1 g/dL)', steroid?'Evet':'Hayır', steroid?'Steroid düşünülebilir (tartışmalı, vaka bazında); klinik olarak mümkün olan en kısa sürede kesilir':'Steroid endikasyonu yok', steroid?'warn':'no',['msdtoxo','hhsoi']);
+        if(steroid) opt(r,'Ek – kortikosteroid (vaka bazında)',[{drug:'Prednizon',perKg:'—',calc:'Doz verilmedi (aşağıdaki nota bakın)',freq:'—',dur:'Mümkün olan en kısa süre'}],'Bebek prednizon dozu bu oturumda birincil kaynaktan doğrulanamadığı için uygulama doz hesaplamaz; AAP Red Book ve uzmanla belirleyin.',['msdtoxo','hhsoi']);
+        r.schedule.push({d:fmt(start),t:'Başlangıç: tam kan sayımı, KCFT; doz güncel ağırlıkla.'});
+        r.schedule.push({d:fmt(start)+' – '+fmt(dailyEnd),t:'Günlük pirimetamin süresince en az haftada bir tam kan sayımı (HHS); her kontrolde doz yeni ağırlıkla.'});
+        r.schedule.push({d:fmt(dailyEnd),t:'Pirimetamin haftada 3 güne iner.'});
+        r.schedule.push({d:fmt(end),t:'Tedavi sonu; IgG "rebound" ve göz muayenesi.'});
+      }
+      r.next.push('Başlangıç: göz muayenesi, beyin görüntüleme, BOS, tam kan sayımı, KCFT, ABR, plasenta incelemesi.');
+      r.next.push('Göz muayenesi ilk 3 yılda 3–6 ayda bir, sonra yıllık.');
+    } else if(r.cls==='disland'){ r.decision='İzlem gerekmez'; r.decK='d-none'; }
+    else if(r.cls==='supheli'){ r.decision='Tanıyı netleştirin'; r.decK='d-wait'; step(r,'Karar','Test','Bebek serolojisi ve PCR sonuçlanınca yeniden değerlendirin','warn',['adlm']); }
+    else { r.decision='Veri girin'; r.decK='d-wait'; }
+    r.refs.add('aap17');
+  }
+
+  // ======================= SİFİLİZ =======================
+  if(M.syph&&M.syph.on){
+    const s=M.syph, r=R('syph'); r.refs.add('cdcsyph');
+    const exam=['hsm','rinit','makulo_dokuntu','kondiloma','pseudoparalizi','hidrops','direkt_bil'].filter(has);
+    const mt=Number(s.matTiter)||0, it=Number(s.infTiter)||0, fold=(mt&&it)?it/mt:null;
+    const aStart=dd(b,start);
+    const older=age>=30;
+    step(r,'Bebek 1 aylıktan küçük mü?', older?'Hayır ('+ageTxt(age)+')':'Evet ('+age+'. gün)', older?'≥1 ay yaklaşımı uygulanır':'Yenidoğan senaryoları (CDC 1–4)', older?'warn':'yes',['cdcsyph']);
+    let sc=null;
+    step(r,'Konjenital sifilizle uyumlu muayene bulgusu var mı?', exam.length?'Evet – '+lbl(exam):'Hayır', exam.length?'Senaryo 1':'', exam.length?'yes':'no',['cdcsyph']);
+    if(exam.length) sc=1;
+    step(r,'Plasenta, kordon, lezyon veya vücut sıvısında karanlık alan/PCR ya da gümüş boyama pozitif mi?', s.direct==='pos'?'Evet':(s.direct==='neg'?'Hayır':'Yapılmadı'), s.direct==='pos'?'Senaryo 1':'', s.direct==='pos'?'yes':'no',['cdcsyph']);
+    if(s.direct==='pos') sc=1;
+    if(fold!=null){
+      const f4=fold>=4;
+      step(r,'Bebek nontreponemal titresi anne doğum titresinin ≥4 katı mı? (aynı test tipi)','Bebek 1:'+it+' / anne 1:'+mt+(s.sameTest?'':' – farklı test tipi'), f4&&s.sameTest?'Senaryo 1':(f4?'Karşılaştırılamaz: aynı test tipi gerekir':'≥4 kat değil'), f4&&s.sameTest?'yes':(f4?'warn':'no'),['cdcsyph']);
+      if(f4&&s.sameTest) sc=1;
+    } else step(r,'Bebek nontreponemal titresi anne doğum titresinin ≥4 katı mı?','Titre eksik','Bebeğin kendi serumunda, annedekiyle aynı test tipinde kantitatif test gerekir (kordon kanı değil)','warn',['cdcsyph']);
+    if(sc!==1){
+      const txMap={none:'Tedavisiz / belgesiz',inadequate:'Yetersiz tedavi',nonpen:'Penisilin G dışı rejim',lt30:'Penisilin, doğumdan <30 gün önce başlamış',ge30:'Gebelikte evresine uygun penisilin, ≥30 gün önce',prepreg:'Gebelik öncesi yeterli tedavi'};
+      if(!s.matTx) step(r,'Anne doğumdan ≥30 gün önce evresine uygun penisilin G ile tedavi edildi mi?','Bilgi girilmedi','Senaryo 2–4 ayrımı için gerekli','warn',['cdcsyph']);
+      else {
+        const s2=['none','inadequate','nonpen','lt30'].includes(s.matTx)||s.reinf;
+        step(r,'Anne doğumdan ≥30 gün önce evresine uygun penisilin G ile tedavi edildi mi? Reenfeksiyon/relaps var mı?', txMap[s.matTx]+(s.reinf?'; reenfeksiyon/relaps var':''), s2?'Senaryo 2':'', s2?'no':'yes',['cdcsyph']);
+        if(s2) sc=2;
+        else if(s.matTx==='ge30') sc=3;
+        else if(s.matTx==='prepreg'){
+          const lowOk=s.matTest==='VDRL'?mt<=2:mt<=4;
+          const ok=!!(s.matLowStable&&lowOk&&mt>0);
+          step(r,'Gebelik öncesi tedavi sonrası titre gebelik boyunca düşük ve stabil mi? (VDRL ≤1:2, RPR ≤1:4)', ok?'Evet ('+(s.matTest||'RPR')+' 1:'+mt+')':'Hayır / bilinmiyor', ok?'Senaryo 4':'Senaryo 3', ok?'yes':'no',['cdcsyph']);
+          sc=ok?4:3;
+        }
+      }
+    }
+    if(s.persist6m&&age>=150){ step(r,'Bebekte nontreponemal test 6. ayda hâlâ reaktif mi?','Evet','Büyük olasılıkla enfekte: değerlendirme ve tedavi','yes',['cdcsyph']); sc=1; }
+    const scName={1:'Senaryo 1 – kanıtlanmış / yüksek olasılıklı',2:'Senaryo 2 – olası',3:'Senaryo 3 – daha az olası',4:'Senaryo 4 – olası değil'};
+    r.cls= sc===1?'kesin':sc===2?'olasi':sc===3?'dusuk':sc===4?'olasidegil':'yok';
+    if(sc) r.clin=scName[sc];
+    const end10=addDays(start,9);
+    const penIV=()=>{
+      const sw=addDays(b,7); let freq;
+      if(aStart<7) freq='Yaşamın ilk 7 gününde 12 saatte bir ('+fmt(start)+' – '+fmt(addDays(sw,-1))+'); 8. günden itibaren 8 saatte bir ('+fmt(sw)+' – '+fmt(end10)+')';
+      else freq='8 saatte bir (bebek 7 günlükten büyük)';
+      return {drug:'Kristalize (sulu) penisilin G – IV',perKg:'50.000 U/kg/doz',calc:calc(50000,'U/doz',0),freq,dur:'10 gün ('+fmt(start)+' – '+fmt(end10)+')'};
+    };
+    const proc={drug:'Prokain penisilin G – IM',perKg:'50.000 U/kg/doz',calc:calc(50000,'U/doz',0),freq:'Günde tek doz',dur:'10 gün ('+fmt(start)+' – '+fmt(end10)+')'};
+    const benz={drug:'Benzatin penisilin G – IM',perKg:'50.000 U/kg',calc: W? nf(Math.min(50000*W,2400000),0)+' U'+(50000*W>2400000?' (erişkin dozu sınırı 2,4 milyon U)':'') : '— (ağırlık girin)',freq:'Tek doz',dur:'Tek doz ('+fmt(start)+')'};
+    const cefRow=older
+      ? {drug:'Seftriakson – yalnız penisilin yokluğunda',perKg:age>=365?'100 mg/kg/gün (çocuk)':'75 mg/kg/gün (≥30 gün)',calc:calc(age>=365?100:75,'mg/gün',0),freq:'Günde tek doz IV/IM',dur:'10–14 gün'}
+      : {drug:'Seftriakson – yalnız penisilin yokluğunda',perKg:'50–75 mg/kg/gün',calc: W? nf(50*W,0)+'–'+nf(75*W,0)+' mg/gün':'— (ağırlık girin)',freq:'24 saatte bir IV',dur:'Uzman danışmanlığıyla'};
+    const cefNote='Penisilin bulunamazsa (CDC): kanıt yetersizdir; yakın izlem ve uzman danışmanlığı gerekir. Tek doz seftriakson yetersizdir.'+(older?'':' Sarılıklı yenidoğanda dikkatli kullanılır.');
+    if(older&&(sc===1||sc===2)){
+      r.decision='Değerlendirme + 10 gün IV penisilin'; r.decK='d-tx';
+      step(r,'Karar (≥1 ay)','Tedavi','BOS (VDRL, hücre, protein), tam kan sayımı; kristalize penisilin G 10 gün','stop',['cdcsyph']);
+      opt(r,'Seçenek 1 – tercih edilen',[{drug:'Kristalize (sulu) penisilin G – IV',perKg:'50.000 U/kg/doz (200.000–300.000 U/kg/gün)',calc:calc(50000,'U/doz',0),freq:'4–6 saatte bir',dur:'10 gün ('+fmt(start)+' – '+fmt(end10)+')'}],'10 günlük kür sonrası tek doz benzatin (en çok 2,4 milyon U) düşünülebilir. Bulgusuz ve BOS normalse, haftada bir benzatin 50.000 U/kg × 3 seçeneği de vardır (CDC).',['cdcsyph']);
+      opt(r,'Penisilin yokluğunda',[cefRow],cefNote,['cdcsyph']);
+      r.next.push('İzlem: 3 ayda bir RPR/VDRL; 12–18 ayda 4 kat düşmezse BOS + 10 günlük kür.');
+    } else if(sc===1){
+      r.decision='Tam değerlendirme + 10 gün penisilin'; r.decK='d-tx';
+      step(r,'Karar (Senaryo 1)','Tedavi','BOS, tam kan sayımı + trombosit, uzun kemik grafisi (gerekirse diğer); 10 günlük penisilin','stop',['cdcsyph']);
+      opt(r,'Seçenek 1 – tercih edilen',[penIV()],'1 günden fazla doz atlanırsa kür baştan başlatılır.',['cdcsyph']);
+      opt(r,'Seçenek 2',[proc],'1 günden fazla doz atlanırsa kür baştan başlatılır.',['cdcsyph']);
+      opt(r,'Penisilin yokluğunda',[cefRow],cefNote,['cdcsyph']);
+      r.next.push('BOS (VDRL, hücre sayımı, protein), tam kan sayımı + trombosit, uzun kemik grafisi; gerekirse akciğer grafisi, KCFT, nörogörüntüleme, göz, ABR.');
+    } else if(sc===2){
+      r.decision='10 gün penisilin (veya koşullu tek doz benzatin)'; r.decK='d-tx';
+      step(r,'Karar (Senaryo 2)','Tedavi','10 günlük penisilin; ya da BOS dahil tüm değerlendirme normal ve izlem kesinse tek doz benzatin','stop',['cdcsyph']);
+      opt(r,'Seçenek 1 – 10 günlük kür (ayrıntılı değerlendirme gerekmez)',[penIV()],'',['cdcsyph']);
+      opt(r,'Seçenek 2',[proc],'',['cdcsyph']);
+      opt(r,'Seçenek 3 – yalnız değerlendirme tamamen normal ve izlem kesinse',[benz],'Değerlendirmenin herhangi bir parçası eksik, anormal veya yorumlanamazsa 10 günlük kür verilir.',['cdcsyph']);
+      r.next.push('Benzatin düşünülüyorsa önce: BOS (VDRL, hücre, protein), tam kan sayımı + trombosit, uzun kemik grafisi.');
+    } else if(sc===3){
+      r.decision='Tek doz benzatin penisilin'; r.decK='d-tx';
+      step(r,'Karar (Senaryo 3)','Tedavi','Ek değerlendirme önerilmez; tek doz benzatin penisilin G','stop',['cdcsyph']);
+      opt(r,'Önerilen',[benz],'',['cdcsyph']);
+    } else if(sc===4){
+      r.decision='Tedavi gerekmez – serolojik izlem'; r.decK='d-fu';
+      step(r,'Karar (Senaryo 4)','İzlem','Tedavi gerekmez; izlem belirsizse ve bebek NTT reaktifse tek doz benzatin düşünülebilir','stop',['cdcsyph']);
+      opt(r,'Yalnız izlem belirsizse ve NTT reaktifse',[benz],'',['cdcsyph']);
+    } else { r.decision='Eksik veri'; r.decK='d-wait'; }
+    if(sc&&!older){
+      r.next.push('İzlem: NTT reaktifse 2–3 ayda bir muayene + RPR/VDRL, negatifleşene kadar. Doğumda NTT negatif ama anne seroreaktifse 3. ayda tekrar.');
+      if(sc>=3) r.next.push('Tedavisiz bebekte titre 3. ayda ('+fmt(addMonths(b,3))+') düşmeli, 6. ayda ('+fmt(addMonths(b,6))+') negatif olmalı; 6. ayda reaktifse tedavi edin.');
+      if(sc<=2) r.next.push('Tedavi edilen bebekte titre 6–12. ayda sürüyorsa BOS tekrarı, uzman görüşü ve 10 günlük kür.');
+    }
+    if(r.options.length) r.notes.push('Doz, tedavi başlangıcındaki ağırlıkla hesaplanır. Enjeksiyon hacmi, kullanılan ürünün sulandırma konsantrasyonuna göre hesaplanmalıdır.');
+    r.notes.push('Yenidoğan serumunda treponemal test ve ticari IgM önerilmez. Bebek ve anne HIV açısından da test edilmelidir. Sifiliz bildirimi zorunludur (vaka tipi şüpheli/olası/kesin).');
+    r.refs.add('trbild');
+  }
+  Object.values(out.results).forEach(r=>{ r.refs=[...r.refs]; });
+  return out;
+}
+// ===== ENGINE END =====
+
+// ================= UI =================
+const $=id=>document.getElementById(id);
+const SEL3=[['','Yapılmadı'],['pos','Pozitif'],['neg','Negatif']];
+const MODS={
+  toxo:[['sub','Anne'],['chk','matAcute','Gebelikte serokonversiyon / akut enfeksiyon'],['num','matWeek','Enfeksiyonun gebelik haftası'],['chk','prenatalTx','Gebelikte tedavi aldı'],['sel','amnio','Amniyotik sıvı PCR',SEL3],
+        ['sub','Bebek'],['sel','igg','Toxoplasma IgG',SEL3],['date','iggDate','IgG örnek tarihi'],['chk','iggPrevPos','Önceden pozitif olan IgG bu örnekte negatifleşti'],['sel','igm','IgM',SEL3],['date','igmDate','IgM örnek tarihi'],['sel','iga','IgA',SEL3],['date','igaDate','IgA örnek tarihi'],
+        ['chk','refLab','IgM/IgA referans laboratuvarda çalışıldı'],['sel','pcr','Kan / BOS / idrar PCR',SEL3],['chk','treated','Bebek tedavi aldı veya alıyor'],['chk','csfProtein1g','BOS proteini ≥1 g/dL']],
+  cmv:[['sel','urine','İdrar CMV PCR',SEL3],['date','urineDate','İdrar örnek tarihi'],['sel','saliva','Tükürük CMV PCR',SEL3],['date','salivaDate','Tükürük örnek tarihi'],['sel','dbs','Guthrie kartı (kurutulmuş kan) CMV PCR',SEL3],['sel','csf','BOS CMV PCR',SEL3],
+       ['chk','prenatal','Prenatal tanı veya annede gebelikte primer CMV'],['chk','severeOrgan','Ağır tek organ tutulumu (belirgin hepatit / HSM)'],['chk','persist2w','Bulgular 2 haftadan uzun sürüyor']],
+  syph:[['sub','Anne'],['num','matTiter','Anne nontreponemal titresi (doğumda) 1:'],['sel','matTest','Test tipi',[['RPR','RPR'],['VDRL','VDRL']]],
+        ['sel','matTx','Annenin tedavisi',[['','Seçin…'],['none','Tedavisiz / belgesiz'],['inadequate','Yetersiz tedavi'],['nonpen','Penisilin G dışı rejim (ör. eritromisin)'],['lt30','Penisilin; doğumdan <30 gün önce başladı'],['ge30','Gebelikte evresine uygun penisilin, ≥30 gün önce'],['prepreg','Gebelik öncesi yeterli tedavi']]],
+        ['chk','matLowStable','Titre gebelik öncesi, sırası ve doğumda düşük-stabil'],['chk','reinf','Annede reenfeksiyon / relaps kanıtı'],
+        ['sub','Bebek'],['num','infTiter','Bebek nontreponemal titresi (kendi serumu) 1:'],['chk','sameTest','Anne ve bebek titresi aynı test tipiyle bakıldı',true],['sel','direct','Darkfield / PCR / gümüş boyama (plasenta, kordon, lezyon)',SEL3],['chk','persist6m','Bebekte NTT 6. ayda hâlâ reaktif']]
+};
+const MOD_ORDER=['toxo','cmv','syph'];
+
+function buildForm(){
+  const groups={}; FIND_ORDER.forEach(k=>{ const g=FINDINGS[k][1]; (groups[g]=groups[g]||[]).push(k); });
+  $('findBox').innerHTML=Object.keys(groups).map(g=>'<div class="fgroup"><h3>'+g+'</h3>'+groups[g].map(k=>'<label class="check"><input type="checkbox" data-f="'+k+'"> '+FINDINGS[k][0]+'</label>').join('')+'</div>').join('');
+  $('modBox').innerHTML=MOD_ORDER.map(p=>{
+    let h='<details class="layer" id="L-'+p+'"><summary><input type="checkbox" id="on-'+p+'" aria-label="'+PATH[p]+' katmanını aç"> '+PATH[p]+'<span class="cnt" id="cnt-'+p+'"></span></summary><div class="body">';
+    let pair=[]; const flush=()=>{ if(pair.length){ h+='<div class="pair">'+pair.join('')+'</div>'; pair=[]; } };
+    MODS[p].forEach(f=>{
+      const [ty,key,lab,opt]=f, id=p+'-'+key;
+      if(ty==='sub'){ flush(); h+='<div class="sub">'+key+'</div>'; return; }
+      if(ty==='chk'){ flush(); h+='<label class="check"><input type="checkbox" id="'+id+'"'+(opt===true?' checked':'')+'> '+lab+'</label>'; return; }
+      let ctl;
+      if(ty==='sel') ctl='<select id="'+id+'">'+opt.map(o=>'<option value="'+o[0]+'">'+o[1]+'</option>').join('')+'</select>';
+      else if(ty==='date') ctl='<input type="date" id="'+id+'">';
+      else ctl='<input type="number" id="'+id+'" step="any" min="0">';
+      pair.push('<div><label for="'+id+'">'+lab+'</label>'+ctl+'</div>'); if(pair.length===2) flush();
+    });
+    flush(); return h+'</div></details>';
+  }).join('');
+}
+function readInput(){
+  const F={}; document.querySelectorAll('[data-f]').forEach(c=>{ if(c.checked) F[c.dataset.f]=true; });
+  const mods={};
+  MOD_ORDER.forEach(p=>{ const m={on:$('on-'+p).checked}; MODS[p].forEach(f=>{ const [ty,key]=f; if(ty==='sub') return; const el=$(p+'-'+key); m[key]= ty==='chk'? el.checked : el.value; }); mods[p]=m; });
+  return {name:$('pname').value.trim(), birth:$('birth').value, today:$('today').value, ga:$('ga').value, bw:$('bw').value, weight:$('weight').value, txStart:$('txStart').value, transfusion:$('trans').value,
+    findings:F, evals:{abr:$('ev-abr').checked, eye:$('ev-eye').checked, img:$('ev-img').checked}, mods};
+}
+function writeInput(o){
+  $('pname').value=o.name||''; $('birth').value=o.birth||''; $('today').value=o.today||isoToday(); $('ga').value=o.ga||''; $('bw').value=o.bw||''; $('weight').value=o.weight||''; $('txStart').value=o.txStart||''; $('trans').value=o.transfusion||'';
+  document.querySelectorAll('[data-f]').forEach(c=>{ c.checked=!!(o.findings&&o.findings[c.dataset.f]); });
+  const E=o.evals||{}; $('ev-abr').checked=!!E.abr; $('ev-eye').checked=!!E.eye; $('ev-img').checked=!!E.img;
+  MOD_ORDER.forEach(p=>{ const m=(o.mods&&o.mods[p])||{}; $('on-'+p).checked=!!m.on; $('L-'+p).open=!!m.on;
+    MODS[p].forEach(f=>{ const [ty,key,,opt]=f; if(ty==='sub') return; const el=$(p+'-'+key); if(ty==='chk') el.checked=(key in m)? !!m[key] : opt===true; else el.value= m[key]!=null? m[key] : ''; }); });
+}
+function isoToday(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function refLinks(arr){ return arr&&arr.length? '<span class="refs">'+arr.map(k=>SRC[k]?'<a class="ref" href="'+SRC[k].u+'" target="_blank" rel="noopener noreferrer" title="'+esc(SRC[k].t)+'">'+esc(SRC[k].s)+' ↗</a>':'').join('')+'</span>' : ''; }
+
+function run(){
+  const inp=readInput(), res=computeAll(inp);
+  MOD_ORDER.forEach(p=>{ const h=res.hints.find(x=>x.p===p); $('cnt-'+p).textContent=h? h.n+' bulgu':''; });
+  const o=$('out');
+  if(res.error){ o.innerHTML= !inp.birth? '<div class="empty"><h2>Başlamak için doğum tarihini girin</h2><p>Sonra güncel ağırlığı girin, değerlendirmek istediğiniz enfeksiyonun katmanını açın ve bulguları işaretleyin. Sonuçlar her değişiklikte yeniden hesaplanır. Soldaki "Örnek vaka" listesinden hazır bir olguyla da başlayabilirsiniz.</p></div>' : '<div class="empty"><h2>Tarihleri kontrol edin</h2><p>'+esc(res.error)+'</p></div>'; return; }
+  const b=pd(inp.birth), t=pd(inp.today);
+  let h='<div class="actions"><button type="button" id="bPrint">Yazdır / PDF</button><button type="button" class="ghost" id="bSave">Vaka dosyasını kaydet (.json)</button><button type="button" class="ghost" id="bLoadBtn">Vaka dosyası aç</button><input type="file" id="bLoad" accept="application/json,.json" hidden></div>';
+  h+='<section class="patient" aria-label="Bebek özeti"><span class="age">'+esc(res.age)+'</span><span class="meta">'+(inp.name?esc(inp.name)+' – ':'')+'Doğum '+fmt(b)+', değerlendirme '+fmt(t)+(inp.ga?' · '+esc(inp.ga)+' hf':'')+(res.W?' · doz ağırlığı '+String(res.W).replace('.',',')+' kg':'')+'</span></section>';
+  if(res.warn.length) h+='<div class="warn" role="alert"><strong>Dikkat</strong><ul>'+res.warn.map(w=>'<li>'+esc(w)+'</li>').join('')+'</ul></div>';
+  const R=PATH_ORDER.filter(p=>res.results[p]).map(p=>res.results[p]);
+  if(R.length) h+='<section class="panel"><h2>Özet</h2><div class="summary">'+R.map(r=>'<a class="sumc '+CLS[r.cls].k+'" href="#r-'+r.p+'"><div class="h">'+PATH[r.p]+'</div><div class="c"><span class="badge '+CLS[r.cls].k+'">'+CLS[r.cls].t+'</span>'+(r.clin?' '+esc(r.clin):'')+'</div>'+(r.decision?'<div class="d">'+esc(r.decision)+'</div>':'')+'</a>').join('')+'</div></section>';
+  else h+='<div class="empty">Henüz açık katman yok. Soldaki "Enfeksiyon katmanları" bölümünden toksoplazma, CMV veya sifilizi açın.</div>';
+  R.forEach(r=>{
+    const lst=(arr)=>'<ul class="blist">'+arr.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';
+    h+='<article class="res" id="r-'+r.p+'"><div class="hd"><h3>'+PATH[r.p]+'</h3><span class="badge '+CLS[r.cls].k+'">'+CLS[r.cls].t+'</span>'+(r.clin?'<span class="cbadge '+(r.clinK||'')+'">'+esc(r.clin)+'</span>':'')+'</div><div class="bd">';
+    if(r.decision) h+='<div class="decision '+(r.decK||'d-wait')+'"><span class="lab">Karar</span><span>'+esc(r.decision)+'</span></div>';
+    if(r.path.length) h+='<div class="sec"><h4>Karar nasıl verildi</h4><ol class="path">'+r.path.map(s=>'<li class="'+s.st+'"><div class="q">'+esc(s.q)+refLinks(s.ref)+'</div><span class="a">'+esc(s.a)+'</span>'+(s.r?'<span class="r">'+esc(s.r)+'</span>':'')+'</li>').join('')+'</ol></div>';
+    if(r.options.length){
+      h+='<div class="sec"><h4>Tedavi seçenekleri ve doz</h4><p class="wline">'+(res.W?'Hesaplama ağırlığı: <b>'+String(res.W).replace('.',',')+' kg</b> ('+esc(res.Wsrc)+'); başlangıç '+fmt(res.start)+'.':'<b>Ağırlık girilmedi</b>: yalnız kg başına dozlar gösteriliyor.')+'</p>';
+      r.options.forEach(op=>{
+        h+='<div class="opt"><div class="ot">'+esc(op.title)+refLinks(op.ref)+'</div><div class="tblwrap"><table class="dt"><thead><tr><th>İlaç</th><th>Doz</th><th>Hesaplanan</th><th>Sıklık / yol</th><th>Süre</th></tr></thead><tbody>'+
+          op.rows.map(x=>'<tr><td data-l="İlaç"><b>'+esc(x.drug)+'</b></td><td data-l="Doz">'+esc(x.perKg)+'</td><td class="calc" data-l="Hesaplanan">'+esc(x.calc)+'</td><td data-l="Sıklık">'+esc(x.freq)+'</td><td data-l="Süre">'+esc(x.dur)+'</td></tr>').join('')+
+          '</tbody></table></div>'+(op.note?'<div class="on">'+esc(op.note)+'</div>':'')+'</div>';
+      });
+      h+='</div>';
+    }
+    if(r.schedule.length) h+='<div class="sec"><h4>Tedavi ve izlem takvimi</h4><ul class="sched">'+r.schedule.map(x=>'<li><span class="sd">'+esc(x.d)+'</span><span>'+esc(x.t)+'</span></li>').join('')+'</ul></div>';
+    if(r.next.length) h+='<div class="sec"><h4>Önerilen tetkik ve izlem</h4>'+lst(r.next)+'</div>';
+    if(r.notes.length) h+='<div class="sec"><h4>Notlar</h4>'+lst(r.notes)+'</div>';
+    h+='<div class="sec"><h4>Kaynaklar</h4><ol class="srcl">'+r.refs.map(k=>'<li><a href="'+SRC[k].u+'" target="_blank" rel="noopener noreferrer">'+esc(SRC[k].t)+' ↗</a><span class="url">'+esc(SRC[k].u)+'</span></li>').join('')+'</ol></div>';
+    h+='</div></article>';
+  });
+  if(res.hints.length) h+='<section class="panel hintsec"><h2>Bulgulara göre ilişkili etkenler</h2><p class="hint" style="margin-bottom:8px">İşaretlenen bulguların hangi etkenle ilişkili olduğu; sıralama bulgu sayısınadır, olasılık değildir.</p><div class="hints">'+res.hints.map(x=>'<div class="hintc"><b>'+PATH[x.p]+' · '+x.n+' bulgu</b><span class="its">'+esc(x.items.join(', '))+'</span>'+(x.on?'':'<br><button type="button" class="ghost small" data-open="'+x.p+'">Katmanı aç</button>')+'</div>').join('')+'</div></section>';
+  h+='<section class="panel"><h2>Sınıfların anlamı</h2><ul class="notes"><li><b>Kesin:</b> etkenin bebekte doğrudan gösterilmesi veya hastalığa özgü laboratuvar ölçütü.</li><li><b>Olası:</b> doğrulanmamış pozitif test ya da uyumlu klinik + destekleyici seroloji.</li><li><b>Şüpheli:</b> uyumlu bulgu veya anne öyküsü var, bebek testi yok/bekleniyor.</li><li><b>Belirsiz:</b> konjenital ve sonradan edinilmiş enfeksiyon ayrılamıyor (CMV\'de 21. gün sonrası örnek).</li><li><b>Daha az olası / olası değil:</b> sifilizde CDC senaryo 3 ve 4.</li><li>Sifiliz sınıfları CDC\'nin resmi senaryolarıdır; CMV ve toksoplazma sınıfları rehber ölçütlerinden türetilmiş çalışma sınıflarıdır.</li></ul><p class="hint">Sürüm '+APP_VERSION+', kural güncellemesi '+RULES_DATE+'.</p></section>';
+  o.innerHTML=h;
+  $('bPrint').onclick=()=>window.print(); $('bSave').onclick=saveJSON; $('bLoadBtn').onclick=()=>$('bLoad').click(); $('bLoad').onchange=loadJSON;
+  o.querySelectorAll('[data-open]').forEach(btn=>btn.onclick=()=>{ const p=btn.dataset.open; $('on-'+p).checked=true; $('L-'+p).open=true; run(); $('L-'+p).scrollIntoView({behavior:'smooth',block:'start'}); });
+}
+function download(name,text,type){ const blob=new Blob([text],{type}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},500); }
+function saveJSON(){ const i=readInput(); download('konjenital_'+((i.name||'vaka').replace(/[^\wığüşöçİĞÜŞÖÇ-]+/g,'_'))+'_'+i.today+'.json',JSON.stringify(i,null,2),'application/json'); }
+function loadJSON(e){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=()=>{ try{ writeInput(JSON.parse(r.result)); run(); }catch(err){ alert('Dosya okunamadı: geçerli bir vaka dosyası (.json) seçin.'); } }; r.readAsText(f); e.target.value=''; };
+
+function rel(n){ const d=new Date(); d.setDate(d.getDate()+n); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+const SAMPLES={
+  toxo:{t:'Toksoplazma – semptomatik, koryoretinit (5 haftalık)',f:()=>({name:'Örnek – Toksoplazma',birth:rel(-35),today:rel(0),ga:'39',bw:'3000',weight:'3.9',findings:{koryoretinit:1,kalsifikasyon_diff:1},evals:{abr:1,eye:1,img:1},mods:{toxo:{on:1,matAcute:true,matWeek:'22',igg:'pos',iggDate:rel(-30),igm:'pos',igmDate:rel(-30),refLab:true}}})},
+  toxo2:{t:'Toksoplazma – annede 30. haftada serokonversiyon, bebek testi yok',f:()=>({name:'Örnek – Toksoplazma şüpheli',birth:rel(-4),today:rel(0),ga:'39',bw:'3250',weight:'3.2',findings:{},evals:{},mods:{toxo:{on:1,matAcute:true,matWeek:'30'}}})},
+  cmv:{t:'CMV – SSS tutulumlu semptomatik (12 günlük)',f:()=>({name:'Örnek – CMV',birth:rel(-12),today:rel(0),ga:'38',bw:'2350',weight:'2.45',findings:{mikrosefali:1,kalsifikasyon_pv:1,petesi:1,trombositopeni:1,sga:1,tarama_kaldi:1},evals:{abr:1,eye:1,img:1},mods:{cmv:{on:1,urine:'pos',urineDate:rel(-8)}}})},
+  cmv2:{t:'CMV – izole işitme kaybı (25 günlük)',f:()=>({name:'Örnek – CMV izole SNHL',birth:rel(-25),today:rel(0),ga:'39',bw:'3300',weight:'3.9',findings:{snhl:1,tarama_kaldi:1},evals:{abr:1,eye:1,img:1},mods:{cmv:{on:1,urine:'pos',urineDate:rel(-20)}}})},
+  syph:{t:'Sifiliz – anne tedavisi doğumdan 2 hafta önce (3 günlük)',f:()=>({name:'Örnek – Sifiliz S2',birth:rel(-3),today:rel(0),ga:'39',bw:'3100',weight:'3.05',findings:{},evals:{},mods:{syph:{on:1,matTiter:'16',matTest:'RPR',matTx:'lt30',infTiter:'8',sameTest:true}}})},
+  syph2:{t:'Sifiliz – bebek titresi anneden 4 kat yüksek (2 günlük)',f:()=>({name:'Örnek – Sifiliz S1',birth:rel(-2),today:rel(0),ga:'38',bw:'2900',weight:'2.85',findings:{hsm:1},evals:{},mods:{syph:{on:1,matTiter:'4',matTest:'RPR',matTx:'none',infTiter:'16',sameTest:true}}})},
+  syph3:{t:'Sifiliz – anne gebelikte ≥30 gün önce tedavili (1 günlük)',f:()=>({name:'Örnek – Sifiliz S3',birth:rel(-1),today:rel(0),ga:'40',bw:'3400',weight:'3.4',findings:{},evals:{},mods:{syph:{on:1,matTiter:'8',matTest:'RPR',matTx:'ge30',infTiter:'2',sameTest:true}}})}
+};
+
+function bind(){
+  document.querySelector('.form').addEventListener('change',e=>{
+    const t=e.target; if(t.id&&/^on-/.test(t.id)){ $('L-'+t.id.slice(3)).open=t.checked; }
+    if(t.id==='sample'){ const s=SAMPLES[t.value]; if(s){ writeInput(s.f()); run(); } t.value=''; return; }
+    run();
+  });
+  document.querySelector('.form').addEventListener('input',e=>{ if(e.target.type==='number') run(); });
+  document.querySelectorAll('details.layer summary input').forEach(cb=>cb.addEventListener('click',e=>e.stopPropagation()));
+}
+(function(){
+  const vl=$('verLine'); vl.innerHTML='Sürüm '+APP_VERSION+', kural güncellemesi '+RULES_DATE+'<span class="offline-tag" id="offTag">Çevrimdışı</span>';
+  const off=()=>$('offTag').classList.toggle('show',!navigator.onLine);
+  window.addEventListener('online',off); window.addEventListener('offline',off); off();
+  const standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  if(isIOS&&!standalone&&location.protocol!=='file:') $('iosHint').classList.add('show');
+  let deferred=null;
+  window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); deferred=e; $('installBtn').classList.add('show'); });
+  $('installBtn').onclick=async()=>{ if(!deferred) return; deferred.prompt(); await deferred.userChoice; deferred=null; $('installBtn').classList.remove('show'); };
+  if('serviceWorker' in navigator&&location.protocol!=='file:'){
+    let waiting=null, asked=false, reloading=false;
+    const offer=w=>{ waiting=w; $('updBar').classList.add('show'); };
+    $('updBtn').onclick=()=>{ if(!waiting) return; asked=true; waiting.postMessage('SKIP_WAITING'); };
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{ if(!asked||reloading) return; reloading=true; location.reload(); });
+    navigator.serviceWorker.register('sw.js').then(reg=>{
+      if(reg.waiting&&navigator.serviceWorker.controller) offer(reg.waiting);
+      reg.addEventListener('updatefound',()=>{ const nw=reg.installing; nw.addEventListener('statechange',()=>{ if(nw.state==='installed'&&navigator.serviceWorker.controller) offer(nw); }); });
+      setInterval(()=>reg.update().catch(()=>{}),3600000);
+    }).catch(()=>{});
+  }
+})();
+buildForm();
+$('sample').innerHTML+=Object.keys(SAMPLES).map(k=>'<option value="'+k+'">'+SAMPLES[k].t+'</option>').join('');
+$('today').value=isoToday();
+bind(); run();
+</script>
+</body>
+</html>
